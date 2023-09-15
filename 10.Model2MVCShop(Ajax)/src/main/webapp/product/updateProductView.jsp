@@ -95,7 +95,7 @@ $(function() {
 
 <body bgcolor="#ffffff" text="#000000">
 
-<form name="detailForm" method="post">
+<form name="detailForm" enctype="multipart/form-data" method="post">
 <%-- <input type="hidden" name="prodNo" value="<%= vo.getProdNo() %>"/>--%>
 <input type="hidden" name="prodNo" value="${product.prodNo}"/>
 <table width="100%" height="37" border="0" cellpadding="0" cellspacing="0">
@@ -193,17 +193,24 @@ $(function() {
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 	</tr>
-	<tr>
-		<td width="104" class="ct_write">상품이미지</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-		<%-- 	<input	type="text" name="fileName" class="ct_input_g" 
-						style="width: 200px; height: 19px" maxLength="13" value="<%=vo.getFileName()%>"/>
-		--%>
-				<input	type="text" name="fileName" class="ct_input_g" 
-						style="width: 200px; height: 19px" maxLength="13" value="${product.fileName}"/>
-		</td>
-	</tr>
+	
+<tr>
+    <td width="104" class="ct_write">상품이미지</td>
+    <td bgcolor="D6D6D6" width="1"></td>
+    <td class="ct_write01">
+        <!-- 이미지 표시 부분 -->
+        <img src="/images/uploadFiles/${product.fileName}" width="100" alt=""/>
+        <br>
+
+        <!-- 파일 업로드 필드 -->
+        <input type="file" name="file" class="ct_input_g" style="width: 200px;" maxLength="15" />
+        <input type="hidden" name="fileName" value="${product.fileName}"/>
+        <!-- 현재 파일 이름 표시 (선택 사항) -->
+        <div>현재 파일 이름: ${product.fileName}</div>
+    </td>
+</tr>
+
+
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 	</tr>

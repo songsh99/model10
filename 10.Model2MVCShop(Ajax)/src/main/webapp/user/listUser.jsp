@@ -14,14 +14,18 @@
 	
 	<!-- CDN(Content Delivery Network) 호스트 사용 -->
 	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 	<script type="text/javascript">
 	
 		// 검색 / page 두가지 경우 모두 Form 전송을 위해 JavaScrpt 이용  
 		function fncGetUserList(currentPage) {
 			$("#currentPage").val(currentPage)
 			$("form").attr("method" , "POST").attr("action" , "/user/listUser").submit();
+			
+		
 		}
-
+		 
 		//==>"검색" ,  userId link  Event 연결 및 처리
 		 $(function() {
 			 

@@ -1,5 +1,6 @@
 package com.model2.mvc.web.product;
 
+import java.io.File;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -7,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.fileupload.DiskFileUpload;
+import org.apache.commons.fileupload.FileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
@@ -63,18 +67,26 @@ public class ProductController {
 	}
 
 	//@RequestMapping("/addProduct.do")
-	@RequestMapping(value="addProduct",method = RequestMethod.POST)
-	public String addProduct( @ModelAttribute("product") Product product, Model model ) throws Exception {
-		
-		
-		System.out.println("============no가져오자 제"+product);
-		System.out.println("/product/addProduct : POST");
-		//Business Logic
-		System.out.println("수정page 입니다 ???");
-		String temDir=""
-		productService.addProduct(product);
-		model.addAttribute("product", product);
-		return "forward:/product/getProduct.jsp";
+	@RequestMapping(value = "addProduct", method = RequestMethod.POST)
+	public String addProduct(
+	    @ModelAttribute("product") Product product,
+	    @RequestParam("file") MultipartFile file, Model model, HttpServletRequest request, HttpServletResponse response
+	) throws Exception {
+	    // 파일 업로드 처리
+	    if (!file.isEmpty()) {
+	        String originalFilename = file.getOriginalFilename();
+	        // 파일을 업로드할 경로 설정
+	        String uploadDir = "C:\\Users\\bohmn\\git\\10model\\10.Model2MVCShop(Ajax)\\src\\main\\webapp\\images\\uploadFiles\\";
+	        String filePath = uploadDir + originalFilename;
+	        File dest = new File(filePath);
+	        file.transferTo(dest); // 파일을 저장
+	        product.setFileName(originalFilename);
+	    }
+	    
+	    // 나머지 비즈니스 로직 처리
+	    productService.addProduct(product);
+	    model.addAttribute("product", product);
+	    return "forward:/product/getProduct.jsp";
 	}
 	
 	//@RequestMapping("/getProduct.do")
@@ -135,20 +147,35 @@ public class ProductController {
 		return "forward:/product/updateProductView.jsp";
 	}
 	
-		//@RequestMapping("/updateProduct.do")
-		@RequestMapping(value="updateProduct",method=RequestMethod.POST)		
-		public String updateProduct( @ModelAttribute("product") Product product , Model model , HttpSession session) throws Exception{
+		@RequestMapping(value = "updateProduct", method = RequestMethod.POST)
+		public String updateProduct(
+		    @ModelAttribute("product") Product product,
+		    @RequestParam(value = "file", required = false) MultipartFile file, Model model, HttpSession session
+		) throws Exception {
+		    // 파일 업로드 로직을 실행하지 않음
+		    if (file != null && !file.isEmpty()) {
+		        String originalFilename = file.getOriginalFilename();
+		        String uploadDir = "C:\\Users\\bohmn\\git\\10model\\10.Model2MVCShop(Ajax)\\src\\main\\webapp\\images\\uploadFiles\\";
+		        String filePath = uploadDir + originalFilename;
+		        File dest = new File(filePath);
+		        System.out.println(originalFilename+"dfdsfdsgsdhadgadgaefgeafaegwrbwrljgnwdrjlsvgnweljgvnwls");
+		        file.transferTo(dest); // 파일을 저장
+		        product.setFileName(originalFilename);
+		    }else {
+		    	
+		    }
 
-			System.out.println("/product/updateProduct : POST");
-			//Business Logic
-			productService.updateProduct(product);
-			 
-			System.out.println("updateView post 방식으로 들어왔는지 확인 ==========");
-			System.out.println(product+"prod 확인문 ::::::::");
-			session.setAttribute("product", product);
-			
-			return "forward:/product/getProduct.jsp";
-//			return "forward:/product/getProduct";
+		    // 나머지 업데이트 로직 처리
+		    productService.updateProduct(product);
+
+		    System.out.println("updateView post 방식으로 들어왔는지 확인 ==========");
+		    System.out.println(product + "prod 확인문 ::::::::");
+		    session.setAttribute("product", product);
+
+		    return "forward:/product/getProduct.jsp";
 		}
+
+
+
 
 }

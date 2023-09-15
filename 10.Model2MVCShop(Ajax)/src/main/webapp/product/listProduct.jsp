@@ -30,7 +30,7 @@ $(function() {
 		fncGetProductList(1);
 	});
 	
-	$( ".ct_list_pop td:nth-child(3)" ).on("click" , function() {
+	$( ".ct_list_pop td:nth-child(5)" ).on("click" , function() {
 	    var prodNo = $(this).closest("tr").find(".prod-no").val();
 	    
 	    // 어떤 페이지로 이동할지를 조건에 따라 결정합니다.
@@ -55,18 +55,18 @@ $(function() {
 					//Debug...
 					//alert("JSONData : \n"+JSONData);
 					
-					var displayValue = "<h3>"
+					var displayValue = "<h5>"
 												+"상품번호 : "+JSONData.prodNo+"<br/>"
 												+"상품명 : "+JSONData.prodName+"<br/>"
 												+"상세정보 : "+JSONData.prodDetail+"<br/>"
 												+"가격 : "+JSONData.price+" 원<br/>"
 												+"상품등록일 : "+JSONData.manuDate+"<br/>"
-												+"파일 : "+JSONData.fileName+"<br/>"
+												+"이미지 파일 : "+JSONData.fileName+"<br/>"
 												+"</h3>";
 					//Debug...									
 					//alert(displayValue);
 					
-					$("h3").remove();
+					$("h5").remove();
 					$( "#"+prodNo+"" ).html(displayValue);
 				}
 	    		
@@ -77,7 +77,7 @@ $(function() {
 	});
 		
 
-	$( ".ct_list_pop td:nth-child(3)" ).css("color" , "red");
+	$( ".ct_list_pop td:nth-child(5)" ).css("color" , "red");
 	$("h7").css("color" , "red");
 					
 	$(".ct_list_pop:nth-child(4n+6)" ).css("background-color" , "whitesmoke");;
@@ -156,18 +156,21 @@ $(function() {
 		</td>
 	</tr>
 	<tr>
-		<td class="ct_list_b" width="100">No</td>
+		<td class="ct_list_b" width="30">No</td>
 		<td class="ct_line02"></td>
-		
+		<td class="ct_list_b" width="100">상품이미지 <br>
+		<td class="ct_line02"></td>
 		<td class="ct_list_b" width="150">상품명<br>
 			<h7>Click[상세보기]</h7>
 		</td>
+		
 		<td class="ct_line02"></td>
 		<td class="ct_list_b" width="150">가격</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b">등록일</td>	
 		<td class="ct_line02"></td>
-		<td class="ct_list_b">현재상태</td>	
+		<!-- <td class="ct_list_b">현재상태</td>	
+		<td class="ct_line02"></td> -->
 	</tr>
 	<tr>
 		<td colspan="11" bgcolor="808285" height="1"></td>
@@ -176,7 +179,10 @@ $(function() {
 	<c:forEach var="product" items="${list}">
 		<c:set var="i" value="${ i+1 }" />
 		<tr class="ct_list_pop">
+		
 			<td align="center">${ i }</td>
+			<td></td>
+			<td><img src="/images/uploadFiles/${product.fileName}" width="100" alt=""/></td>
 			<td></td>
 			<td align="center">
 			     <c:choose>
@@ -193,7 +199,8 @@ $(function() {
 			<td></td>
 			<td align="center">${product.price} 원</td>
 			<td></td>
-			<td align="center">${product.regDate}</td>		
+			<td align="center">${product.regDate}</td>
+				
 		</tr>
 		<tr>
 		<!--  <td colspan="11" bgcolor="D6D7D6" height="1"></td>-->
